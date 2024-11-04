@@ -20,7 +20,8 @@ uid="$(id -u)"
 group="$(id -g -n)"
 gid="$(id -g)"
 
-# 先停止删除上一个同名容器，所以每次重新run，都要重新 cmake 和 make，相当于新开了
+# 先停止删除上一个同名容器
+# 所以每次重新run，都要重新 cmake 和 make，相当于新创建了一个容器
 echo "stop and rm docker" 
 docker stop linux_monitor > /dev/null
 docker rm -v -f linux_monitor > /dev/null
