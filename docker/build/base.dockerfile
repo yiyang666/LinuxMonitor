@@ -5,7 +5,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # 时区  
 ENV TZ=Asia/Shanghai
 
-# 使用bash终端
+# 使用bash终端 
 SHELL ["/bin/bash", "-c"]
 
 # 清理自带的/不必要的软件
@@ -16,7 +16,7 @@ RUN apt-get clean && \
 COPY apt/sources.list /etc/apt/
 
 # 更新apt-get -y表示默认输入yes
-# 安装一些必要的，基础包，能够自己默认装好的库
+# 在容器内安装一些必要的，基础包，能够自己默认装好的库
 RUN apt-get update  && apt-get upgrade -y  && \
     apt-get install -y \
     htop \
@@ -44,14 +44,20 @@ RUN apt-get install -y  \
     libfontconfig1 \
     libxkbcommon0   \
     libxkbcommon-x11-0
-# python库
+# python库，下面需要，现在目前看是不需要了
 RUN apt-get install -y python-dev \
     python3-dev \
     python-pip \
     python-all-dev 
 
+
+# 上面装过了
+# COPY install/cmake /tmp/install/cmake
+# RUN /tmp/install/cmake/install_cmake.sh
+
 # 下面这些库需要自己下载压缩包，编译，安装
 # 编写shell脚本来安装
+# COPY：当前目录->目的目录
 COPY install/protobuf /tmp/install/protobuf
 RUN /tmp/install/protobuf/install_protobuf.sh
 
@@ -61,10 +67,9 @@ RUN /tmp/install/abseil/install_abseil.sh
 COPY install/grpc /tmp/install/grpc
 RUN /tmp/install/grpc/install_grpc.sh
 
-# 下面这些重复了
 
-# COPY install/cmake /tmp/install/cmake
-# RUN /tmp/install/cmake/install_cmake.sh
+
+# 下面这些不需要了
 
 # RUN apt-get install -y python3-pip
 # RUN pip3 install cuteci -i https://mirrors.aliyun.com/pypi/simple

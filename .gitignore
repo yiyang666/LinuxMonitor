@@ -1,0 +1,10 @@
+# 忽略所有以 .a 或 .o 结尾的文件
+*.a
+*.o
+
+# 忽略整个 build 目录
+build/
+!/*/build/
+.vscode/
+
+
