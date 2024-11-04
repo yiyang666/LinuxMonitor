@@ -2,7 +2,7 @@
 *.a
 *.o
 
-# 忽略整个 build 目录
+# 忽略整个 build 目录 !表示不忽略
 build/
 !/*/build/
 .vscode/
