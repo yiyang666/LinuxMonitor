@@ -1,6 +1,10 @@
 syntax = "proto3";
 package monitor.proto;
 
+// namespace monitor {
+// namespace proto {
+// class CpuLoad;
+
 message CpuLoad {
     float load_avg_1 = 1;
     float load_avg_3 = 2;
