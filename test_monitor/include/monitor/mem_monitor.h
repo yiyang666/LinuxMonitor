@@ -10,12 +10,12 @@
 namespace monitor {
 class MemMonitor : public MonitorInter {
   struct MenInfo {
-    int64_t total;
-    int64_t free;
-    int64_t avail;
-    int64_t buffers;
-    int64_t cached;
-    int64_t swap_cached;
+    int64_t total;    // 所有内存大小，除去一些预留空间
+    int64_t free;     // 完全没用到的物理内存
+    int64_t avail;    // 在不使用交换空间的情况下，启动一个新的应用最大可用内存的大小
+    int64_t buffers;  // 块设备所占用的缓存页
+    int64_t cached;   // 普通文件数据所占用的缓存页
+    int64_t swap_cached; // 包含的是被确定要swapping换页，但是尚未写入物理交换区的匿名内存页
     int64_t active;
     int64_t in_active;
     int64_t active_anon;

@@ -14,7 +14,8 @@
 #include "monitor_info.grpc.pb.h"
 #include "monitor_info.pb.h"
 
-
+// 继承QWidget类，所有窗口类的父类（控件类也属于窗口类）
+// 在类之前需要加上 Q_OBJECT ，才能使用QT中的signal和slot机制
 namespace monitor {
 class MonitorWidget : public QWidget {
   Q_OBJECT
@@ -26,6 +27,7 @@ class MonitorWidget : public QWidget {
     //   thread_->join();
     // }
   }
+  // 自定义的窗口： 大窗口，cpu窗口，软中断窗口，内存窗口，网络窗口，按钮菜单控件
   QWidget* ShowAllMonitorWidget(const std::string& name);
   QWidget* InitCpuMonitorWidget();
   QWidget* InitSoftIrqMonitorWidget();

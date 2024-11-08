@@ -8,9 +8,11 @@ namespace monitor {
 void CpuStatMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
   ReadFile cpu_stat_file(std::string("/proc/stat"));
   std::vector<std::string> cpu_stat_list;
+  // 一行对应一个cpu，用while一行一行的读（只考虑描述cup的行，后面的行舍弃）
   while (cpu_stat_file.ReadLine(&cpu_stat_list)) {
     if (cpu_stat_list[0].find("cpu") != std::string::npos) {
       // std::cout << cpu_stat_list[0] << cpu_stat_list[1] << std::endl;
+      // 得到当前最新的状态值
       struct CpuStat cpu_stat;
       cpu_stat.cpu_name = cpu_stat_list[0];
       cpu_stat.user = std::stof(cpu_stat_list[1]);
@@ -24,11 +26,15 @@ void CpuStatMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
       cpu_stat.guest = std::stof(cpu_stat_list[9]);
       cpu_stat.guest_nice = std::stof(cpu_stat_list[10]);
 
+      // 获取3秒前的数据来参与运算，通过哈希map来存旧数据
       auto it = cpu_stat_map_.find(cpu_stat.cpu_name);
       if (it != cpu_stat_map_.end()) {
         // std::cout << cpu_stat.cpu_name << std::endl;
-        struct CpuStat old = it->second;
+        struct CpuStat old = it->second; //如果旧数据存在，创建一个cpu_stat对象来接收
         auto cpu_stat_msg = monitor_info->add_cpu_stat();
+        
+        // 这些是需要用到的中间值
+        // cpu总时间
         float new_cpu_total_time = cpu_stat.user + cpu_stat.system +
                                    cpu_stat.idle + cpu_stat.nice +
                                    cpu_stat.io_wait + cpu_stat.irq +
@@ -36,12 +42,14 @@ void CpuStatMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
         float old_cpu_total_time = old.user + old.system + old.idle + old.nice +
                                    old.io_wait + old.irq + old.soft_irq +
                                    old.steal;
+        // cpu忙碌时间
         float new_cpu_busy_time = cpu_stat.user + cpu_stat.system +
                                   cpu_stat.nice + cpu_stat.irq +
                                   cpu_stat.soft_irq + cpu_stat.steal;
         float old_cpu_busy_time = old.user + old.system + old.nice + old.irq +
                                   old.soft_irq + old.steal;
-
+        
+        // 这些是计算最后需要呈现的平均状态值
         float cpu_percent = (new_cpu_busy_time - old_cpu_busy_time) /
                             (new_cpu_total_time - old_cpu_total_time) * 100.00;
         float cpu_user_percent = (cpu_stat.user - old.user) /
@@ -65,6 +73,7 @@ void CpuStatMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
         float cpu_soft_irq_percent = (cpu_stat.soft_irq - old.soft_irq) /
                                      (new_cpu_total_time - old_cpu_total_time) *
                                      100.00;
+        // 给protobuf对象赋值，一共9个，参考cpu_stat.proto中的结构
         cpu_stat_msg->set_cpu_name(cpu_stat.cpu_name);
         cpu_stat_msg->set_cpu_percent(cpu_percent);
         cpu_stat_msg->set_usr_percent(cpu_user_percent);
@@ -75,8 +84,9 @@ void CpuStatMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
         cpu_stat_msg->set_irq_percent(cpu_irq_percent);
         cpu_stat_msg->set_soft_irq_percent(cpu_soft_irq_percent);
       }
-      cpu_stat_map_[cpu_stat.cpu_name] = cpu_stat;
+      cpu_stat_map_[cpu_stat.cpu_name] = cpu_stat; // 当前数据存起来作为下一次的旧数据
     }
+    // 不需要的行数据直接清空
     cpu_stat_list.clear();
   }
 

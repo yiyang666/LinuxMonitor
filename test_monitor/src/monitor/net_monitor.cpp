@@ -8,9 +8,10 @@ void NetMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
   std::vector<std::string> net_datas;
   while (net_file.ReadLine(&net_datas)) {
     std::string name = net_datas[0];
+    // 把网卡信息所在行筛选出来
     if (name.find(':') == name.size() - 1 && net_datas.size() >= 10) {
       struct NetInfo net_info;
-      name.pop_back();
+      name.pop_back(); // 去掉最后一个‘:’字符
       net_info.name = name;
       net_info.rcv_bytes = std::stoll(net_datas[1]);
       net_info.rcv_packets = std::stoll(net_datas[2]);
@@ -24,13 +25,18 @@ void NetMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
 
       auto iter = net_info_.find(name);
       if (iter != net_info_.end()) {
+
+        // 右值引用移动语义，避免不必要的拷贝操作，将 iter->second 从左值转换为右值
+        // 右值通常表示临时对象或即将被销毁的对象
         struct NetInfo old = std::move(iter->second);
         double period =
             Utils::SteadyTimeSecond(net_info.timepoint, old.timepoint);
         auto one_net_msg = monitor_info->add_net_info();
         one_net_msg->set_name(net_info.name);
+        // 发送字节速度
         one_net_msg->set_send_rate((net_info.snd_bytes - old.snd_bytes) /
                                    1024.0 / period);
+        // 接收字节速度
         one_net_msg->set_rcv_rate((net_info.rcv_bytes - old.rcv_bytes) /
                                   1024.0 / period);
         one_net_msg->set_send_packets_rate(

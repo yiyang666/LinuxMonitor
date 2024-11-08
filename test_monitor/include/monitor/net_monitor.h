@@ -12,14 +12,14 @@ namespace monitor {
 class NetMonitor : public MonitorInter {
   struct NetInfo {
     std::string name;
-    int64_t rcv_bytes;
-    int64_t rcv_packets;
-    int64_t err_in;
-    int64_t drop_in;
-    int64_t snd_bytes;
-    int64_t snd_packets;
-    int64_t err_out;
-    int64_t drop_out;
+    int64_t rcv_bytes;    // 接口接收的数据的总字节数
+    int64_t rcv_packets;  // 接口接收的数据包总数
+    int64_t err_in;       // 由设备驱动程序检测到的接收错误的总数
+    int64_t drop_in;      // 设备驱动程序丢弃的接收数据包总数
+    int64_t snd_bytes;    // 接口发送的数据的总字节数
+    int64_t snd_packets;  // 接口发送的数据包总数
+    int64_t err_out;      // 由设备驱动程序检测到的发送错误的总数
+    int64_t drop_out;     // 设备驱动程序丢弃的发送数据包总数
     boost::chrono::steady_clock::time_point timepoint;
   };
 

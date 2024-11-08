@@ -5,9 +5,10 @@ namespace monitor {
 static constexpr float KBToGB = 1000 * 1000;
 
 void MemMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
-  ReadFile mem_file("/proc/meminfo");
+  ReadFile mem_file("/proc/meminfo");  // 得到文件流
   struct MenInfo mem_info;
   std::vector<std::string> mem_datas;
+  // 读取每一行的值，是n行键值对，单位是kB
   while (mem_file.ReadLine(&mem_datas)) {
     if (mem_datas[0] == "MemTotal:") {
       mem_info.total = std::stoll(mem_datas[1]);
@@ -48,11 +49,12 @@ void MemMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
     } else if (mem_datas[0] == "SUnreclaim:") {
       mem_info.sUnreclaim = std::stoll(mem_datas[1]);
     }
-    mem_datas.clear();
+    mem_datas.clear(); // 其它的舍弃
   }
 
   auto mem_detail = monitor_info->mutable_mem_info();
 
+  // 把kB换算成GB，赋给proto对象
   mem_detail->set_used_percent((mem_info.total - mem_info.avail) * 1.0 /
                                mem_info.total * 100.0);
   mem_detail->set_total(mem_info.total / KBToGB);

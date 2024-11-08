@@ -14,9 +14,9 @@ class CpuLoadMonitor : public MonitorInter {
   void Stop() override {}
 
  private:
-  float load_avg_1_;
-  float load_avg_3_;
-  float load_avg_15_;
+  float load_avg_1_; // 1分钟平均负载
+  float load_avg_3_; // 5 分钟平均负载
+  float load_avg_15_;// 15 分钟平均负载
 };
 
 }  // namespace monitor

@@ -7,6 +7,8 @@
 
 namespace monitor {
 void CpuSoftIrqMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
+
+  // 软中断命令显示过多cpu的解决办法：column -t /proc/softirqs | cut -c 1-100，显示1-100列
   ReadFile softirqs_file(std::string("/proc/softirqs"));
   std::vector<std::string> one_softirq;
   std::vector<std::vector<std::string>> softirq;
@@ -31,6 +33,7 @@ void CpuSoftIrqMonitor::UpdateOnce(monitor::proto::MonitorInfo* monitor_info) {
     info.rcu = std::stoll(softirq[10][i + 1]);
     info.timepoint = boost::chrono::steady_clock::now();
 
+    // 与cpu状态类一样，这里也需要使用map存旧数据，取一个平均值
     auto iter = cpu_softirqs_.find(name);
     if (iter != cpu_softirqs_.end()) {
       struct SoftIrq& old = (*iter).second;
