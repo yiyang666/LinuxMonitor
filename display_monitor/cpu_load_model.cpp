@@ -38,6 +38,9 @@ QVariant CpuLoadModel::data(const QModelIndex& index, int role) const {
 
 void CpuLoadModel::UpdateMonitorInfo(
     const monitor::proto::MonitorInfo& monitor_info) {
+  // beginResetModel()和endResetModel() 是 QAbstractItemModel 模型类中的一个成员函数
+  // 它们成对出现，可以确保视图在数据更新完成后再进行刷新，从而保证显示的正确性。
+  // 告诉视图，模型的数据即将发生重大变化，视图应该准备重新获取所有数据。
   beginResetModel();
   monitor_data_.clear();
 
@@ -47,6 +50,7 @@ void CpuLoadModel::UpdateMonitorInfo(
   // QModelIndex rightBottom = createIndex(monitor_data_.size(), COLUMN_MAX);
   // emit dataChanged(leftTop, rightBottom, {});
 
+  //  告诉视图，模型的数据更新已经完成，视图可以重新渲染
   endResetModel();
 
   return;

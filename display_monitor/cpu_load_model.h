@@ -13,6 +13,7 @@ class CpuLoadModel : public MonitorInterModel {
   Q_OBJECT
 
  public:
+  // 禁止隐式类型转换，避免意外的类型转换
   explicit CpuLoadModel(QObject *parent = nullptr);
 
   virtual ~CpuLoadModel() {}
@@ -27,14 +28,15 @@ class CpuLoadModel : public MonitorInterModel {
   void UpdateMonitorInfo(const monitor::proto::MonitorInfo &monitor_info);
 
  signals:
+  // 数据刷新
   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
                    const QVector<int> &roles);
 
  private:
   std::vector<QVariant> insert_one_cpu_load(
       const monitor::proto::CpuLoad &cpu_load);
-  std::vector<std::vector<QVariant>> monitor_data_;
-  QStringList header_;
+  std::vector<std::vector<QVariant>> monitor_data_; //二维数组存放表格数据
+  QStringList header_; // 标题
 
   enum CpuLoad {
     CPU_AVG_1 = 0,

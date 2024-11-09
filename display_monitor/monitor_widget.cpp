@@ -9,7 +9,7 @@ QWidget *MonitorWidget::ShowAllMonitorWidget(const std::string& name) {
   QWidget *widget = new QWidget();
   // QStackedLayout类提供了多页面切换的布局，一次只能看到一个界面
   stack_menu_ = new QStackedLayout();
-  // 类似于窗口容器，把自定义的窗口都添加进去
+  // 堆栈式菜单，类似于窗口容器，把自定义的窗口都添加进去
   stack_menu_->addWidget(InitCpuMonitorWidget());
   stack_menu_->addWidget(InitSoftIrqMonitorWidget());
   stack_menu_->addWidget(InitMemMonitorWidget());
@@ -47,7 +47,7 @@ QWidget *MonitorWidget::InitButtonMenu(const std::string& name) {
   QWidget *widget = new QWidget();
   widget->setLayout(layout);
 
-  // 触发方式，点击按钮，发送信号，执行对应的信号处理函数
+  // connect()将按钮点击产生的信号连接到槽函数，在槽函数中编写按钮点击后要执行的代码
   connect(cpu_button, SIGNAL(clicked()), this, SLOT(ClickCpuButton()));
   connect(soft_irq_button, SIGNAL(clicked()), this, SLOT(ClickSoftIrqButton()));
   connect(mem_button, SIGNAL(clicked()), this, SLOT(ClickMemButton()));
@@ -168,6 +168,7 @@ QWidget *MonitorWidget::InitNetMonitorWidget() {
   return widget;
 }
 
+// 刷新操作是通过data_model进行刷新的
 void MonitorWidget::UpdateData(
     const monitor::proto::MonitorInfo &monitor_info) {
   monitor_model_->UpdateMonitorInfo(monitor_info);
@@ -177,8 +178,8 @@ void MonitorWidget::UpdateData(
   net_model_->UpdateMonitorInfo(monitor_info);
 }
 
-// 点击不同的按钮产生信号，设置信号处理函数
-// 给之前加入到stack_menu的窗口设置不同的索引
+
+// 实现槽函数，将stack_menu中的窗口按序号显示出来，0 表示显示第一个添加的页面
 void MonitorWidget::ClickCpuButton() { stack_menu_->setCurrentIndex(0); }
 void MonitorWidget::ClickSoftIrqButton() { stack_menu_->setCurrentIndex(1); }
 void MonitorWidget::ClickMemButton() { stack_menu_->setCurrentIndex(2); }
