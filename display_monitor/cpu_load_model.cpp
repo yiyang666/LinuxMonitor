@@ -38,11 +38,11 @@ QVariant CpuLoadModel::data(const QModelIndex& index, int role) const {
 
 void CpuLoadModel::UpdateMonitorInfo(
     const monitor::proto::MonitorInfo& monitor_info) {
-  // beginResetModel()和endResetModel() 是 QAbstractItemModel 模型类中的一个成员函数
+  // beginResetModel()和endResetModel() 是 QAbstractItemModel模型类中的一个成员函数
   // 它们成对出现，可以确保视图在数据更新完成后再进行刷新，从而保证显示的正确性。
   // 告诉视图，模型的数据即将发生重大变化，视图应该准备重新获取所有数据。
   beginResetModel();
-  monitor_data_.clear();
+  monitor_data_.clear();  // 清空上一次二维数组
 
   monitor_data_.push_back(insert_one_cpu_load(monitor_info.cpu_load()));
 
@@ -54,11 +54,11 @@ void CpuLoadModel::UpdateMonitorInfo(
   endResetModel();
 
   return;
-} 
-
+}
+// 把传过来的数据转换成QVariant类型
 std::vector<QVariant> CpuLoadModel::insert_one_cpu_load(
     const monitor::proto::CpuLoad& cpu_load) {
-  std::vector<QVariant> cpu_load_list;
+  std::vector <QVariant> cpu_load_list;
   for (int i = CpuLoad::CPU_AVG_1; i < COLUMN_MAX; i++) {
     switch (i) {
       case CpuLoad::CPU_AVG_1:

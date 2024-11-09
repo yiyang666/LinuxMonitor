@@ -16,6 +16,7 @@ class RpcClient {
   void GetMonitorInfo(monitor::proto::MonitorInfo* monito_info);
 
  private:
+  // 智能指针保存stub存根，自动析构  
   std::unique_ptr<monitor::proto::GrpcManager::Stub> stub_ptr_;
 };
 }  // namespace monitor

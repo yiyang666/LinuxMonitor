@@ -19,7 +19,9 @@ set(SOURCES
 #
 # Target
 #
+# 可执行程序，时刻监听所有ip下指定端口的客户端请求
 add_executable(server ${SOURCES})
+# 链接库
 target_link_libraries(server
     PUBLIC
     monitor_proto

@@ -7,6 +7,7 @@
 #include "monitor_info.pb.h"
 
 namespace monitor {
+  // 需要继承proto中定义的gRPC服务
 class GrpcManagerImpl : public monitor::proto::GrpcManager::Service {
  public:
   GrpcManagerImpl();

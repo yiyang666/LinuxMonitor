@@ -15,7 +15,7 @@
 #include "monitor_info.pb.h"
 
 // 继承QWidget类，所有窗口类的父类（控件类也属于窗口类）
-// 在类之前需要加上 Q_OBJECT ，才能使用QT中的signal和slot机制
+// 在类声明之前需要加上 Q_OBJECT ，才能使用QT中的signal和slot机制（信号与槽）
 namespace monitor {
 class MonitorWidget : public QWidget {
   Q_OBJECT

@@ -28,16 +28,19 @@ class CpuLoadModel : public MonitorInterModel {
   void UpdateMonitorInfo(const monitor::proto::MonitorInfo &monitor_info);
 
  signals:
-  // 数据刷新
+  // 数据刷新，dataChanged()用于局部数据变动，而beginResetModel()用于整个视图的变化
+  // 优化后统一使用beginResetModel()，这里没用上
   void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight,
                    const QVector<int> &roles);
 
  private:
+  // 类型转换，通过这个函数把转换好的列表加入到二维数组中
   std::vector<QVariant> insert_one_cpu_load(
       const monitor::proto::CpuLoad &cpu_load);
-  std::vector<std::vector<QVariant>> monitor_data_; //二维数组存放表格数据
+  // Qt自带的数据类型的二维数组存放表格数据   
+  std::vector<std::vector<QVariant>> monitor_data_;
   QStringList header_; // 标题
-
+  // 枚举类型
   enum CpuLoad {
     CPU_AVG_1 = 0,
     CPU_AVG_3,

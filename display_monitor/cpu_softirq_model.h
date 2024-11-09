@@ -34,6 +34,7 @@ class MonitorBaseModel : public MonitorInterModel {
   std::vector<QVariant> insert_one_soft_irq(
       const monitor::proto::SoftIrq &soft_irq);
   std::vector<std::vector<QVariant>> monitor_data_;
+  // Qt字符串数组类型
   QStringList header_;
 
   enum SoftIrqInfo {
