@@ -14,11 +14,11 @@ class MonitorInterModel : public QAbstractTableModel {
   explicit MonitorInterModel(QObject *parent = nullptr)
       : QAbstractTableModel(parent) {}
 
-  // 设置布局，颜色等
+  // 数据表格，设置文字的布局，颜色等
   QVariant data(const QModelIndex &index,
                 int role = Qt::DisplayRole) const override;
 
-  // 设置列名，大小，背景颜色等
+  // 设置表头列名，大小，背景颜色等
   QVariant headerData(int section, Qt::Orientation orientation,
                       int role) const override;
   virtual ~MonitorInterModel() {}

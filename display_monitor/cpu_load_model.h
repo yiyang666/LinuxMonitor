@@ -34,7 +34,7 @@ class CpuLoadModel : public MonitorInterModel {
                    const QVector<int> &roles);
 
  private:
-  // 类型转换，通过这个函数把转换好的列表加入到二维数组中
+  // 类型转换，通过这个函数把转换好的数据（QT数据类型）加入到数组中
   std::vector<QVariant> insert_one_cpu_load(
       const monitor::proto::CpuLoad &cpu_load);
   // Qt自带的数据类型的二维数组存放表格数据   

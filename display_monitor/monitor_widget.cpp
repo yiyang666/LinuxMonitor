@@ -22,7 +22,6 @@ QWidget *MonitorWidget::ShowAllMonitorWidget(const std::string& name) {
   widget->setLayout(layout);
   return widget;
 }
-
 // 菜单按钮控件，控制大窗体每次只显示单独窗口
 QWidget *MonitorWidget::InitButtonMenu(const std::string& name) {
   // char *name = getenv("USER");
@@ -55,7 +54,6 @@ QWidget *MonitorWidget::InitButtonMenu(const std::string& name) {
 
   return widget;
 }
-
 // cup_load和cpu_stat放在同一个窗体
 QWidget *MonitorWidget::InitCpuMonitorWidget() {
   QWidget *widget = new QWidget();

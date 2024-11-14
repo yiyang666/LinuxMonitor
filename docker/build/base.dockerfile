@@ -36,7 +36,7 @@ RUN apt-get update  && apt-get upgrade -y  && \
     stress 
 # grpc需要的软件包
 RUN apt-get install -y libc-ares-dev  libssl-dev gcc g++ make 
-# qt需要的软件包，需要能够访问到主机的Xserver来显示图形
+# qt需要的软件包，需要能够访问到主机的Xserver来显示图形，如X11服务
 RUN apt-get install -y  \
     libx11-xcb1 \
     libfreetype6 \
@@ -44,7 +44,7 @@ RUN apt-get install -y  \
     libfontconfig1 \
     libxkbcommon0   \
     libxkbcommon-x11-0
-# python库，下面需要，现在目前看是不需要了
+# python库，下面QT的安装需要，现在目前看是不需要了
 RUN apt-get install -y python-dev \
     python3-dev \
     python-pip \
@@ -57,7 +57,7 @@ RUN apt-get install -y python-dev \
 
 # 下面这些库需要自己下载压缩包，编译，安装
 # 编写shell脚本来安装
-# COPY：当前目录->目的目录
+# COPY：当前目录->目的目录，前者的目录是通过数据卷映射过来的
 COPY install/protobuf /tmp/install/protobuf
 RUN /tmp/install/protobuf/install_protobuf.sh
 
@@ -66,8 +66,6 @@ RUN /tmp/install/abseil/install_abseil.sh
 
 COPY install/grpc /tmp/install/grpc
 RUN /tmp/install/grpc/install_grpc.sh
-
-
 
 # 下面这些不需要了
 

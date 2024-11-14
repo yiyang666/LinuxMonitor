@@ -2,7 +2,8 @@
 
 set -e # 遇到错误返回值不为0，直接报错
 
-cd "$(dirname "${BASH_SOURCE[0]}")"
+cd "$(dirname "${BASH_SOURCE[0]}")" # 进入到相应的目录下
+# temp/install/abseil
 
 # https://github.com/abseil/abseil-cpp/archive/refs/tags/20200225.2.tar.gz
 # Install abseil.
@@ -27,5 +28,6 @@ popd
 
 ldconfig
 
-# Clean up
+# Clean up，装好后把整个文件删除，避免囤积，包括安装包
+# 通过清除中间产物，可以减小构建镜像的大小
 rm -rf "abseil-cpp-${VERSION}" "${PKG_NAME}"

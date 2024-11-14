@@ -17,6 +17,7 @@ set(SOURCES
 # Target
 #
 # add_executable(client ${SOURCES})
+# 创建一个client静态库，并将你指定的源文件添加到这个库中
 add_library(client  ${SOURCES})
 
 # Public这个关键字表示 "monitor_proto" 库是公开的，

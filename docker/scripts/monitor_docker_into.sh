@@ -9,7 +9,7 @@
 
 # xhost +local:root指定本地root用户才能访问Xserver
 # exec会以root的身份在容器内开启一个终端
-# 这个终端就有了范围主机Xserver的权限
+# 这个终端就有了访问主机Xserver的权限
 # 再把这个权限在本地回收，容器内的终端不影响
 
 # 1>/dev/null 表示终端输出的重定向到 /dev/null（特殊目录，用来丢弃一些输出）
