@@ -6,5 +6,6 @@
 build/
 !/*/build/
 .vscode/
+cmake/
 
 
