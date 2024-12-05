@@ -60,4 +60,7 @@ protobuf_generate(TARGET monitor_proto LANGUAGE cpp)
 # LANGUAGE grpc 表示生成 gRPC 服务端和客户端的存根代码。
 # GENERATE_EXTENSIONS 指定要生成的扩展名 .grpc.pb.h/.grpc.pb.cc
 # PLUGIN 告诉 protobuf_generate 使用 gRPC 插件来生成代码，并指定插件的位置
-protobuf_generate(TARGET monitor_proto LANGUAGE grpc GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc PLUGIN "protoc-gen-grpc=${grpc_cpp_plugin_location}")
+protobuf_generate(TARGET monitor_proto
+    LANGUAGE grpc
+    GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc
+    PLUGIN "protoc-gen-grpc=${grpc_cpp_plugin_location}")

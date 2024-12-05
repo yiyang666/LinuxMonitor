@@ -30,6 +30,7 @@ int main(int argc, char* argv[]) {
 
   // 通过子线程不断从grpc中获取数据
   std::unique_ptr<std::thread> thread_;
+  // 通过智能指针管理这个子线程
   thread_ = std::make_unique<std::thread>([&]() {
     while (true) {
       monitor_info.Clear();
